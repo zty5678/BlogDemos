@@ -22,77 +22,69 @@ import io.zty5678.blog_demos.R
 import kotlinx.coroutines.launch
 
 /**
- * 实现了摇头动画和点头动画
+ * implement the animation of "Yep" and "Nope" in page:
  * https://docs.helpscout.com/article/1250-beacon-jumpstart-guide
  */
 @Preview
 @Composable
-fun YepAnimationpreview() {
-    YepAnimation()
+fun YepAndNopeAnimationPreview() {
+    YepAndNopeAnimation()
 }
 
 @Composable
-fun YepAnimation() {
+fun YepAndNopeAnimation() {
     var isYesAnimating by remember { mutableStateOf(false) }
-    var isNoAnimating by remember { mutableStateOf(false) }
+    var isNopeAnimating by remember { mutableStateOf(false) }
 
-    val animationDuration = 1500 // 总动画时间（不包括延迟）
-    val initialDelay = 50 // 初始延迟
+    val animationDuration = 1500 //total animation duration ms
+    val initialDelay = 50 // initial delay ms
     val totalDuration = animationDuration + initialDelay
 
-    // 定义关键帧的相对时间点（百分比）
+    //specify the keyframes
     val keyFrames = listOf(
-        0f,
-        0.1f, 0.2f,
-        0.3f, 0.4f,
-        0.5f, 0.6f,
-        0.7f,
-        0.8f, 0.9f,
-        1f
+        0f, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1f
     )
 
-    // 定义每个关键帧的 Y 偏移值
+    //specify the multiply times, the bigger the number, the bigger the offset
     val multiply = 1.6f
-
     val offsets = listOf(
         0f,
-        -3.5f * multiply, 3.5f * multiply,
-        -3.5f * multiply, 3.5f * multiply,
-        -3.5f * multiply, 3.5f * multiply,
         -3.5f * multiply,
-        2.6f * multiply, -2.6f * multiply,
+        3.5f * multiply,
+        -3.5f * multiply,
+        3.5f * multiply,
+        -3.5f * multiply,
+        3.5f * multiply,
+        -3.5f * multiply,
+        2.6f * multiply,
+        -2.6f * multiply,
         0f
     )
 
-    val offsetY by animateFloatAsState(
-        targetValue = if (isYesAnimating) 1f else 0f,
+    val offsetY by animateFloatAsState(targetValue = if (isYesAnimating) 1f else 0f,
         animationSpec = keyframes {
             durationMillis = totalDuration
-            0f at 0 using LinearEasing // 初始延迟
+            0f at 0 using LinearEasing
             keyFrames.zip(offsets).forEach { (time, offset) ->
                 offset at (initialDelay + (time * animationDuration).toInt()) using LinearEasing
             }
-        }
-    )
+        })
 
-    val offsetX by animateFloatAsState(
-        targetValue = if (isNoAnimating) 1f else 0f,
+    val offsetX by animateFloatAsState(targetValue = if (isNopeAnimating) 1f else 0f,
         animationSpec = keyframes {
             durationMillis = totalDuration
-            0f at 0 using LinearEasing // 初始延迟
+            0f at 0 using LinearEasing
             keyFrames.zip(offsets).forEach { (time, offset) ->
                 offset at (initialDelay + (time * animationDuration).toInt()) using LinearEasing
             }
-        }
-    )
+        })
 
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
 
-        )
-    {
+        ) {
         Row {
 
 
@@ -101,16 +93,13 @@ fun YepAnimation() {
                     .size(100.dp)
                     .clip(CircleShape)
                     .border(
-                        width = 2.dp,
-                        color = Color.White,
-                        shape = CircleShape
+                        width = 2.dp, color = Color.White, shape = CircleShape
                     )
 
                     .background(Color(0xffFFE8B5))
                     .clickable {
                         isYesAnimating = !isYesAnimating
-                    },
-                contentAlignment = Alignment.Center
+                    }, contentAlignment = Alignment.Center
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_yes),
@@ -123,8 +112,7 @@ fun YepAnimation() {
 
             }
             Spacer(
-                modifier =
-                Modifier.width(20.dp)
+                modifier = Modifier.width(20.dp)
             )
 
 
@@ -133,21 +121,18 @@ fun YepAnimation() {
                     .size(100.dp)
                     .clip(CircleShape)
                     .border(
-                        width = 2.dp,
-                        color = Color.White,
-                        shape = CircleShape
+                        width = 2.dp, color = Color.White, shape = CircleShape
                     )
 
                     .background(Color(0xffFFE8B5))
                     .clickable {
 
-                        isNoAnimating = !isNoAnimating
-                    },
-                contentAlignment = Alignment.Center
+                        isNopeAnimating = !isNopeAnimating
+                    }, contentAlignment = Alignment.Center
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_no),
-                    contentDescription = "No icon",
+                    contentDescription = "Nope icon",
                     modifier = Modifier
                         .size(100.dp)
                         .offset(x = offsetX.dp)
