@@ -37,8 +37,7 @@ fun YepAndNopeAnimation() {
     var isNopeAnimating by remember { mutableStateOf(false) }
 
     val animationDuration = 1500 //total animation duration ms
-    val initialDelay = 50 // initial delay ms
-    val totalDuration = animationDuration + initialDelay
+    val totalDuration = animationDuration
 
     //specify the keyframes
     val keyFrames = listOf(
@@ -64,18 +63,16 @@ fun YepAndNopeAnimation() {
     val offsetY by animateFloatAsState(targetValue = if (isYesAnimating) 1f else 0f,
         animationSpec = keyframes {
             durationMillis = totalDuration
-            0f at 0 using LinearEasing
             keyFrames.zip(offsets).forEach { (time, offset) ->
-                offset at (initialDelay + (time * animationDuration).toInt()) using LinearEasing
+                offset at (time * animationDuration).toInt() using LinearEasing
             }
         })
 
     val offsetX by animateFloatAsState(targetValue = if (isNopeAnimating) 1f else 0f,
         animationSpec = keyframes {
             durationMillis = totalDuration
-            0f at 0 using LinearEasing
             keyFrames.zip(offsets).forEach { (time, offset) ->
-                offset at (initialDelay + (time * animationDuration).toInt()) using LinearEasing
+                offset at (time * animationDuration).toInt() using LinearEasing
             }
         })
 
