@@ -38,13 +38,13 @@ fun YepAndNopeAnimation() {
 
     val animationDuration = 1500 //total animation duration ms
 
-    //specify the timeline
+    //defines 11 key points in time for the animation, from 0 (start) to 1 (end).
     val keyFrames = listOf(
         0f, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1f
     )
 
-    //specify the offsets for the timeline, the bigger the number, the bigger the offset
-    val multiply = 1.6f
+    //This defines the offset values for each keyframe.
+    val multiply = 1.6f /*The multiply factor allows easy scaling of the animation intensity.*/
     val offsets = listOf(
         0f,
         -3.5f * multiply,
@@ -58,19 +58,27 @@ fun YepAndNopeAnimation() {
         -2.6f * multiply,
         0f
     )
-
-    val offsetY by animateFloatAsState(targetValue = if (isYesAnimating) 1f else 0f,
+    //This creates an animated float value for vertical movement.
+    //It's triggered when isYesAnimating becomes true.
+    val offsetY by animateFloatAsState(
+        targetValue = if (isYesAnimating) 0.01f else 0f,
         animationSpec = keyframes {
             durationMillis = animationDuration
+            //Each keyframe is mapped to its corresponding offset.
             keyFrames.zip(offsets).forEach { (time, offset) ->
+                //The timing for each keyframe is calculated as a proportion of the total duration
                 offset at (time * animationDuration).toInt() using LinearEasing
             }
         })
-
-    val offsetX by animateFloatAsState(targetValue = if (isNopeAnimating) 1f else 0f,
+    //This creates an animated float value for horizontal movement.
+    //It's triggered when isNopeAnimating becomes true.
+    val offsetX by animateFloatAsState(
+        targetValue = if (isNopeAnimating) 0.01f else 0f,
         animationSpec = keyframes {
             durationMillis = animationDuration
+            //Each keyframe is mapped to its corresponding offset.
             keyFrames.zip(offsets).forEach { (time, offset) ->
+                //The timing for each keyframe is calculated as a proportion of the total duration
                 offset at (time * animationDuration).toInt() using LinearEasing
             }
         })
@@ -79,11 +87,8 @@ fun YepAndNopeAnimation() {
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-
         ) {
         Row {
-
-
             Box(
                 modifier = Modifier
                     .size(100.dp)
